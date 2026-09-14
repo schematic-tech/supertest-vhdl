@@ -1,0 +1,37 @@
+# Actions are pinned to commit SHAs; Dependabot maintains these pins.
+name: CI
+'on':
+  push:
+    branches:
+    - '**'
+  pull_request: null
+  workflow_dispatch: null
+  workflow_call: null
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      with:
+        persist-credentials: false
+    - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+      with:
+        python-version: '3.13'
+    - run: python scripts/release.py check
+    - run: 'sudo apt-get update
+
+        sudo apt-get install --yes ghdl'
+    - run: python -m pip install fusesoc==2.4.7
+    - run: make test
+    - run: fusesoc --cores-root=. run --target=sim schematic:verification:supertest
+    - run: python scripts/release.py assets
+    - run: python scripts/release.py verify-assets
+    - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+      with:
+        name: release-assets
+        path: dist/
+        if-no-files-found: error
+        retention-days: 14

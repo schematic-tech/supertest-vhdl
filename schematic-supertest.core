@@ -1,0 +1,19 @@
+CAPI=2:
+name: schematic:verification:supertest:0.1.0
+description: Schematic Supertest authoring primitives for VHDL-2008 simulation
+filesets:
+  authoring:
+    files:
+      - src/schematic.vhd
+    file_type: vhdlSource-2008
+  tests:
+    files:
+      - tests/authoring.vhd
+    file_type: vhdlSource-2008
+targets:
+  default:
+    filesets: [authoring]
+  sim:
+    default_tool: ghdl
+    filesets: [authoring, tests]
+    toplevel: authoring
