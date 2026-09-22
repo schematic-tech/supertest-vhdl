@@ -40,7 +40,7 @@ already uploaded during an earlier attempt. Do not change the contents of an
 already published version or move a published tag; use a new version for code fixes.
 
 Registry publication is separate from checker support. These packages provide
-markers and runtime assumptions; they do not expand Pup/backend language discovery.
+markers and runtime assumptions; they do not expand Super/backend language discovery.
 
 ## VHDL and FuseSoC
 
