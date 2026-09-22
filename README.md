@@ -2,26 +2,34 @@
 
 Compile [schematic.vhd](https://raw.githubusercontent.com/schematic-tech/supertest-vhdl/v0.1.1/src/schematic.vhd) into your work library using VHDL-2008.
 
+From the [saturating-increment example](examples/saturating-increment):
+
 ```vhdl
-entity arithmetic is
-  port (value, divisor : in integer);
+library ieee;
+use ieee.numeric_std.all;
+use work.incrementer.all;
+
+entity increment_supertests is
+  port (value : in natural range 0 to 255);
 end entity;
 
-use work.schematic.all;
-
-architecture supertests of arithmetic is
+architecture supertests of increment_supertests is
 begin
   --% supertest
-  integer_division_is_bounded : process
+  increment_never_decreases : process
   begin
-    supertest_assume(value >= 0 and divisor > 0);
-    assert value / divisor <= value severity failure;
+    assert to_integer(saturating_increment(to_unsigned(value, 8))) >= value
+      report "Increment decreased the value" severity failure;
     wait;
   end process;
 end architecture;
 ```
 
 See the [Getting Started Documentation](https://docs.schematic.tech/pup).
+
+## Example
+
+Try [saturating-increment](https://github.com/schematic-tech/supertest-vhdl/tree/main/examples/saturating-increment), an 8-bit incrementer with a supertest that catches overflow.
 
 ## License
 
