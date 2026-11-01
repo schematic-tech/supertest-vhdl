@@ -30,7 +30,7 @@ jobs:
     - run: fusesoc --cores-root=. run --target=sim schematic:verification:supertest
     - run: python scripts/release.py assets
     - run: python scripts/release.py verify-assets
-    - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+    - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
       with:
         name: release-assets
         path: dist/
